@@ -33,7 +33,7 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentUser, currentRole } = useSelector(state => state.user);
+  const { currentUser } = useSelector(state => state.user);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -79,7 +79,7 @@ const Navbar = () => {
 
   return (
     <AppBar position="sticky">
-      <Container maxWidth="xxl" sx={{ backgroundColor: "#004225" }}>
+      <Container maxWidth="xxl" sx={{ backgroundColor: "#01411c" }}>
         <Toolbar disableGutters>
           {/* Logo */}
           <HomeContainer>
@@ -185,7 +185,15 @@ const Navbar = () => {
           )}
 
           {/* User Menu */}
-          {currentUser ? (
+          {!currentUser && (
+            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+              <Button onClick={() => navigate("/login")} sx={{ my: 2, color: 'white', display: 'block' }}>
+                Sign in
+              </Button>
+            </Box>
+          )}
+
+          {currentUser?.role === "Customer" && (
             <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
               <Tooltip title="Cart">
                 <IconButton onClick={() => setIsCartOpen(true)} sx={{ color: 'white' }}>
@@ -219,11 +227,11 @@ const Navbar = () => {
                   <Avatar />
                   <Link to="/Profile" style={{ textDecoration: 'none', color: 'inherit' }}>Profile</Link>
                 </MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick("/Orders")}>
+                <MenuItem onClick={() => handleMenuItemClick("/orders")}>
                   <ListItemIcon>
                     <Shop2 fontSize="small" />
                   </ListItemIcon>
-                  <Link to="/Orders">My Orders</Link>
+                  <Link to="/order">My Orders</Link>
                 </MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick("/print-history")}>
                   <ListItemIcon>
@@ -258,13 +266,6 @@ const Navbar = () => {
                 </MenuItem>
               </Menu>
             </Box>
-          ) : (
-            <Button
-              onClick={() => navigate("/login")}
-              sx={{ color: 'white' }}
-            >
-              Sign in
-            </Button>
           )}
         </Toolbar>
       </Container>
